@@ -1,0 +1,38 @@
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the Breast Cancer dataset
+X, y = load_breast_cancer(return_X_y=True)
+  
+# Split the dataset into training, validation, and testing sets
+X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+X_val, X_test, y_val, y_test = train_test_split(X_temp,  y_temp, test_size=0.5, random_state=42)
+
+# Train a Decision Tree model on the training set
+model_tree = DecisionTreeClassifier()
+model_tree.fit(X_train, y_train)
+
+# Evaluate on the testing set
+y_test_pred_tree = model_tree.predict(X_test)
+test_accuracy_tree = accuracy_score(y_test, y_test_pred_tree)
+print("Decision Tree Testing Accuracy:", test_accuracy_tree)
+
+# Linear Regression for visualization
+model_linear = LinearRegression()
+model_linear.fit(X_train, y_train)
+
+# Predictions using linear regression
+y_val_pred_linear = model_linear.predict(X_val)
+
+# Plot linear regression graph
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=y_val, y=y_val_pred_linear)
+plt.title('Linear Regression Graph')
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.show()
